@@ -1,0 +1,151 @@
+Error getting photo b7e07c69-7168-4068-853c-9a69b8008796: could not convert string to float: b'\x00\x00\x80?'
+Traceback (most recent call last):
+  File "c:\Users\micha\OneDrive - Chr. Hogeschool Ede\School\Jaar 2\OOD\Eindopdracht\src\repositories\photo_repository.py", line 254, in get_by_id
+    confidence=float(vr['confidence']),
+               ^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: could not convert string to float: b'\x00\x00\x80?'
+Photo b7e07c69-7168-4068-853c-9a69b8008796 not found in repository
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1767613184.289901    3184 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1767613184.294628    3184 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+No face detected in photo
+W0000 00:00:1767613184.320112   42684 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1767613184.324359   36400 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1767613184.327069   40320 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1767613184.333560   37372 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1767613184.340177   24684 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1767613184.346722   43384 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+
+
+======================================================================
+               PASFOTO VALIDATIE APPLICATIE DEMO
+                    Complete System Demonstration
+======================================================================
+======================================================================
+DEMO 1: Basis Validatie (zonder face detection)
+======================================================================
+
+BrightnessValidator:
+  Status: PASS
+  Confidence: 1.000
+  Message: Belichting is correct
+
+SharpnessValidator:
+  Status: FAIL
+  Confidence: 0.734
+  Message: Foto is niet scherp genoeg. Probeer opnieuw
+
+Overall Status: rejected
+Overall Confidence: 0.867
+
+======================================================================
+DEMO 2: Storage Systeem
+======================================================================
+
+Save photo: SUCCESS
+Photo ID: b7e07c69-7168-4068-853c-9a69b8008796
+File path: data/photos\approved\b7e07c69-7168-4068-853c-9a69b8008796.jpg
+
+Load photo: FAILED
+
+Storage Statistics:
+  Total photos: 9
+  Storage size: 0.09 MB
+
+======================================================================
+DEMO 3: Repository Pattern
+======================================================================
+
+Database Statistics:
+  Total photos: 9
+  Approved: 9
+  Rejected: 0
+  Pending: 0
+  Avg confidence: 0.000
+
+======================================================================
+DEMO 4: Validation Service (Observer Pattern)
+======================================================================
+
+Validating photo...
+  Running BrightnessValidator... (1/7)
+    [PASS] BrightnessValidator: Belichting is correct
+  Running SharpnessValidator... (2/7)
+    [FAIL] SharpnessValidator: Foto is niet scherp genoeg. Probeer opnieuw
+  Running FacePositionValidator... (3/7)
+    [FAIL] FacePositionValidator: Geen gezicht gedetecteerd. Zorg dat uw gezicht zichtbaar is
+  Running FacialExpressionValidator... (4/7)
+    [FAIL] FacialExpressionValidator: Geen gezicht gedetecteerd
+  Running EyeVisibilityValidator... (5/7)
+    [FAIL] EyeVisibilityValidator: Geen gezicht gedetecteerd
+  Running ReflectionValidator... (6/7)
+    [PASS] ReflectionValidator: Geen significante reflecties gedetecteerd
+  Running ShadowValidator... (7/7)
+    [PASS] ShadowValidator: Geen storende schaduwen gedetecteerd
+
+Final Result:
+  Valid: False
+  Confidence: 0.533
+  Status: rejected
+
+======================================================================
+DEMO 5: Design Patterns
+======================================================================
+
+1. Factory Pattern (FaceDetectionModelFactory):
+   [OK] Created 2 models via factory
+
+2. Strategy Pattern (Validators as strategies):
+   [OK] Loaded 2 validator strategies
+     - BrightnessValidator: Controleert of de belichting van de foto correct is
+     - SharpnessValidator: Controleert of de foto voldoende scherp is en niet wazig
+
+3. Repository Pattern (Data access abstraction):
+   [OK] Using SQLitePhotoRepository (implements IPhotoRepository)
+   [OK] Can be swapped with PostgreSQL or other implementation
+
+4. Observer Pattern (ValidationService -> Observers):
+   [OK] Attached 2 observers to ValidationService
+       - GUI Observer
+       - Logging Observer
+
+5. Singleton Pattern (ValidatorConfig):
+   [OK] Centralized configuration:
+       - BRIGHTNESS_THRESHOLD: 0.7
+       - SHARPNESS_THRESHOLD: 0.75
+
+======================================================================
+DEMO 6: SOLID Principles
+======================================================================
+
+[S] Single Responsibility Principle:
+    - BrightnessValidator: only validates brightness
+    - CameraService: only handles camera
+    - StorageService: only handles storage
+
+[O] Open/Closed Principle:
+    - New validators can be added without modifying existing code
+    - IValidator interface enables extension
+
+[L] Liskov Substitution Principle:
+    - All validators can substitute IValidator
+    - SQLitePhotoRepository can substitute IPhotoRepository
+
+[I] Interface Segregation Principle:
+    - IValidator: small, focused interface
+    - IPhotoRepository: only essential CRUD operations
+
+[D] Dependency Inversion Principle:
+    - ValidationService depends on IValidator abstraction
+    - StorageService depends on IPhotoRepository abstraction
+
+======================================================================
+SUCCESS: ALL DEMOS COMPLETED
+======================================================================
+
+Next steps:
+1. Run tests: .\venv\Scripts\pytest.exe
+2. Download BioID: .\venv\Scripts\python.exe scripts\download_bioid_dataset.py
+3. Test with BioID: .\venv\Scripts\python.exe scripts\test_with_bioid.py
+4. Start GUI: .\venv\Scripts\python.exe main.py
